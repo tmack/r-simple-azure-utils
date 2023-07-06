@@ -1,4 +1,4 @@
-# version 0.0.2
+# version 0.0.3
 # note: you may need to install the following two libraries
 # install.packages("AzureStor")
 # install.packages("rjson")
@@ -216,15 +216,32 @@ upload_to_datalake <- function(datalake_name, container_name, dest_path, src_pat
   
 }
 
-get_datalake_token <- function(settings_path) {
-  settings_file <- fromJSON(file = settings_path)
-  tenant_id <- settings_file[['AZURE_TENANT_ID']]
-  client_id <- settings_file[['AZURE_CLIENT_ID']]
-  client_secret <- settings_file[['AZURE_CLIENT_SECRET']]
-  
+get_datalake_token <- function(settings_path=NULL) {
+  tenant_id <- NULL
+  client_id <- NULL
+  client_secret <- NULL
+  # try to load settings from file
+  if (!is.null(settings_path)) {
+    settings_file <- fromJSON(file = settings_path)
+    tenant_id <- settings_file[['AZURE_TENANT_ID']]
+    client_id <- settings_file[['AZURE_CLIENT_ID']]
+    client_secret <- settings_file[['AZURE_CLIENT_SECRET']]
+  }
+
+  # if the file doesn't have a secret check the environment
+  if(Sys.getenv('AZURE_TENANT_ID') != "") {
+        tenant_id <-Sys.getenv('AZURE_TENANT_ID')
+  }
+  if(Sys.getenv('AZURE_CLIENT_ID') != "") {
+        client_id <-Sys.getenv('AZURE_CLIENT_ID')
+  }
+  if(Sys.getenv('AZURE_CLIENT_SECRET') != "") {
+        client_secret <-Sys.getenv('AZURE_CLIENT_SECRET')
+  }
+
   token <- AzureRMR::get_azure_token("https://storage.azure.com",
-                                     tenant=tenant_id, 
-                                     app=client_id, 
+                                     tenant=tenant_id,
+                                     app=client_id,
                                      password=client_secret)
   return(token)
 }
