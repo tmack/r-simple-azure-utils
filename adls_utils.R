@@ -105,6 +105,7 @@ download_from_datalake <- function(datalake_name, container_name, datalake_path,
       print(datalake_path)
       message(e)
       if(failure_ok != TRUE) {
+        file.remove(download_path)
         stop(e)
       }
     }
