@@ -104,10 +104,14 @@ download_from_datalake <- function(datalake_name, container_name, datalake_path,
       print('Unable to download file from ADLS')
       print(datalake_path)
       message(e)
-      if(failure_ok != TRUE) {
-        file.remove(download_path)
+      if(failure_ok == TRUE) {
+        if(overwrite_download_path == TRUE) {
+          file.remove(download_path)
+        }
+      } else {
         stop(e)
       }
+      
     }
     
   )
