@@ -254,7 +254,7 @@ get_datalake_token <- function(settings_path=NULL) {
     }
   )
     az_login <- AzureRMR::get_azure_login()
-    token <- AzureRMR::get_azure_token("https://storage.azure.com", tenant='common', app=az_login$token$client$client_id)
+    token <- AzureRMR::get_azure_token("https://storage.azure.com", tenant=az_login$tenant, app=az_login$token$client$client_id)
 
   } else {
 
