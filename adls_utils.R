@@ -243,7 +243,7 @@ get_datalake_token <- function(settings_path=NULL) {
         client_secret <-Sys.getenv('AZURE_CLIENT_SECRET')
   }
 
-  if(is.null(tenant_id) && is.null(client_id) && is.null(client_secret)) {
+  if(is.null(tenant_id) & is.null(client_id) & is.null(client_secret)) {
     tryCatch(
     expr = {
         az_login <- AzureRMR::get_azure_login()
